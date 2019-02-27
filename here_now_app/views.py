@@ -56,36 +56,35 @@ def logout_view(request):
 	logout(request)
 	return HttpResponseRedirect('/')
 
-def profile(request, username):
-	user = User.objects.get(username=username)
-	return render(request, 'profile.html', {'username': username })
+def profile(request):
+	# user = User.objects.get(username=request.user.id)
+	return render(request, 'profile.html')
 
 def about(request):
 	return render(request, 'about.html')
 
-def today(request, user_id):
+def today(request):
 	form = DayForm()
 	return render(request, 'today.html', {'form': form})
 
 def post_today(request):
-	print("request=", request)
-	print("user.id=", user.id)
+	print("request.user=", request.user.id)
+	print("request.POST=", request.POST)
 	form = DayForm(request.POST)
 	if form.is_valid():
-		day = form.save(commit = False)
-		day.date = request.date
-		day.chill_score = request.chill_score
-		day.user_id = user.id
+		# form.save()
+		day = form.save(commit=False)
+		day.user_id = request.user.id
 		day.save()
-	return HttpResponseRedirect('/today')
+		return HttpResponseRedirect('/today')
 
 def day(request, day_id):
 	day = Day.objects.get(id=day_id)
 	moments = list(Moment.objects.filter(when_id=day_id))
 	return render(request, 'day.html', {'day': day, 'moments': moments})
 
-def before(request, user_id):
-	days = list(Day.objects.filter(user_id=user_id).order_by('-date')) # to convert days from query string to list
+def before(request):
+	days = list(Day.objects.filter(user_id=request.user.id).order_by('-date')) # to convert days from query string to list
 	now = datetime.datetime.today().date()
 	if(days):
 		return render(request, 'before.html', {'days': days, 'now': now })

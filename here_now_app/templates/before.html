@@ -5,15 +5,13 @@
 
 	<h1>Hi, {{ user.username }}! You are here, now.</h1>
 
-	It is {% now "F j, Y" %}
-
 	<form method="POST" action="post_url/">
 		{% csrf_token %}
 		{{ form.as_p}}
 		<input type="submit" value="Submit" />
 	</form>
 
-	<h1>Yesterday . . .</h1>
+	<h2>Yesterday and before. . .</h2>
 
 	{% if days %}
 		{% for day in days %}

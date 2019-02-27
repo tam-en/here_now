@@ -8,15 +8,16 @@ from . import views
 urlpatterns = [
 	# ex: /here_now_app/
 	path('', views.index, name="index"), # home/landing page route
-	path('user/<username>/', views.profile, name='profile'),
+	path('profile/', views.profile, name='profile'),
 	path('login/', views.login_view, name="login"),
 	path('logout/', views.logout_view, name="logout"),
 	path('signup', views.signup, name="signup"),
 	path('about', views.about, name="about"),
 	path('day/<int:day_id>', views.day, name="day"),
-	path('today/<user_id>', views.today, name="today"),
-	path('post_url/', views.post_today, name="post_today"),
-	path('before/<user_id>', views.before, name='before')
+	path('today', views.today, name="today"),
+	path('post_today', views.post_today, name="post_today"),
+	# path('before/<user_id>', views.before, name='before')
+	path('before/', views.before, name='before')
 ]
 
 

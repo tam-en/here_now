@@ -5,7 +5,7 @@
 
 <h1>Hi, {{ user.username }}! You are here, now.</h1>
 
-<form method="POST" action="post_url/">
+<form method="POST" action="post_today">
 	{% csrf_token %}
 	{{ form.as_p}}
 	<input type="submit" value="Submit" />

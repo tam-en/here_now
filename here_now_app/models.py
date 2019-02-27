@@ -11,12 +11,7 @@ class Day(models.Model):
 	chill_score = models.DecimalField(decimal_places=1,max_digits=3, default=5.0)
 
 	def __str__(self):
-		return self.date.strftime("%Y%m%d (%A, %b %d, %Y)")
-
-class DayForm(ModelForm):
-	class Meta:
-		model = Day
-		fields = ['date', 'chill_score', 'user']
+		return self.date.strftime("%A, %b %d, %Y")
 
 class Moment(models.Model):
 	desc = models.CharField(max_length=200)

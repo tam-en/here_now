@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+
+	<h1>this is the "before" page!</h1>
+
+	{% if days %}
+		{% for day in days %}
+			<h2>{{day}}</h2>
+			{% for data_chunk in day %}
+				<p>{{data_chunk}}</p>
+			{% endfor %}
+				<p>chill score: {{day.chill_score}}</p>
+				{% if moments %}
+				<h4>Nice moments from {{day.date}}:</h4>
+					{% for moment in moments %}
+						<p>what: {{moment.desc}}</p>
+						<p>where: {{moment.where}}</p>
+						<p>when_id: {{moment.when_id}}</p>
+
+						<hr />
+					{% endfor %}
+				{% else %}
+					<p>(no moments recorded for this day)</p>
+				{% endif %}
+		{% endfor %}
+	{% else %}
+		<p>You have not recorded information about previous days. Go enjoy today!</p>
+	{% endif %}
+
+	{% if moments %}
+		{% for moment in moments%}
+			<p>what: {{moment.desc}}</p>
+			<p>where: {{moment.where}}</p>
+		{% endfor%}
+	{% endif%}
+
+
+{% endblock %}
+

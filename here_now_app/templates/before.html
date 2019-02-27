@@ -3,25 +3,37 @@
 
 {% block content %}
 
-	<h1>this is the "before" page!</h1>
+	<h1>Hi, {{ user.username }}! You are here, now.</h1>
+
+	It is {% now "F j, Y" %}
+
+	<form method="POST" action="post_url/">
+		{% csrf_token %}
+		{{ form.as_p}}
+		<input type="submit" value="Submit" />
+	</form>
+
+	<h1>Yesterday . . .</h1>
 
 	{% if days %}
 		{% for day in days %}
-			<h2>{{day.date}}</h2>
+			{% if day.date == now %}
+				Hey! It's today!
+			{% endif %}
+			<h2>{{day.date}}, {{now}}</h2>
 			<p>chill score: {{day.chill_score}}</p>
-			{% if moments %}
-				<h4>Nice moments from {{day.date}}:</h4>
-					{% for moment in moments %}
-						<p>what: {{moment.desc}}</p>
-						<p>where: {{moment.where}}</p>
-						<hr />
-					{% endfor %}
-				{% else %}
-					<p>(no moments recorded for this day)</p>
-				{% endif %}
+			{% if day.moment_set.all %}
+				<h4>Nice moments from this day:</h4>
+				{% for moment in day.moment_set.all %}
+					<p><strong>{{moment.where}}:</strong> {{moment.desc}}</p>
+				{% endfor %}
+			{% else %}
+				<p>(no moments recorded for this day)</p>
+			{% endif %}
+		<hr />
 		{% endfor %}
 	{% else %}
-		<p>You have not recorded information about any of your yesterdays yet. But that's okay, because yesterday is but a dream, tomorrow is a vision, so go enjoy today.</p>
+		<p>You have not recorded information about previous days. Go enjoy today!</p>
 	{% endif %}
 
 {% endblock %}

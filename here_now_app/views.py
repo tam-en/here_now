@@ -5,13 +5,10 @@ from .forms import LoginForm, DayForm, MomentForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
+import datetime
 
 
-# Create your views here.
 def index(request):
-	# cats = Cat.objects.all()
-	# form = CatForm()
-	# return HttpResponse('<h1>hi there.</h1>')
 	return render(request, 'index.html')
 
 def signup(request):
@@ -85,16 +82,13 @@ def post_today(request):
 def day(request, day_id):
 	day = Day.objects.get(id=day_id)
 	moments = list(Moment.objects.filter(when_id=day_id))
-	return render(request, 'day.html', {'day': day, 'moments': moments})	
+	return render(request, 'day.html', {'day': day, 'moments': moments})
 
 def before(request, user_id):
-	days = list(Day.objects.filter(user_id=user_id)) # to convert days from query string to list
+	days = list(Day.objects.filter(user_id=user_id).order_by('-date')) # to convert days from query string to list
+	now = datetime.datetime.today().date()
 	if(days):
-		for day in days:
-			moments = list(Moment.objects.filter(when_id=day.id))	
-		return render(request, 'before.html', {'days': days, 'moments':moments})
+		return render(request, 'before.html', {'days': days, 'now': now })
 	else:
-		return render(request, 'before.html', {'days': days, 'moments':None})
-
-
+		return render(request, 'before.html', {'days': None, 'now': now })
 

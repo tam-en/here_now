@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1>this is the "before" page!</h1>
+
+	{% if days %}
+		{% for day in days %}
+			<h2>{{day.date}}</h2>
+			<p>chill score: {{day.chill_score}}</p>
+			{% if moments %}
+				<h4>Nice moments from {{day.date}}:</h4>
+					{% for moment in moments %}
+						<p>what: {{moment.desc}}</p>
+						<p>where: {{moment.where}}</p>
+						<hr />
+					{% endfor %}
+				{% else %}
+					<p>(no moments recorded for this day)</p>
+				{% endif %}
+		{% endfor %}
+	{% else %}
+		<p>You have not recorded information about any of your yesterdays yet. But that's okay, because yesterday is but a dream, tomorrow is a vision, so go enjoy today.</p>
+	{% endif %}
+
+{% endblock %}

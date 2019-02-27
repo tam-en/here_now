@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+	<h1>{{ day.date }}</h1>
+	<p>chill score = {{ day.chill_score }}</p><br />
+
+	{% if moments %}
+	<h3>Nice moments from {{day.date}}:</h3>
+		{% for moment in moments %}
+			<p>what: {{moment.desc}}</p>
+			<p>where: {{moment.where}}</p>
+			<hr />
+		{% endfor %}
+	{% else %}
+		<p>(no moments recorded for this day)</p>
+	{% endif%}
+
+{% endblock %}

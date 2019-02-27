@@ -1,0 +1,28 @@
+body {
+	font-family: 'Fira Sans', sans-serif;
+}
+
+
+h1, h2, h3, h4, h5, h6 {
+	font-weight: 600;
+}
+
+.giant {
+	font-weight: 800;
+	font-size: 40px;
+}
+
+.title-wrapper {
+	display: -webkit-flex;
+	display: flex;
+	-webkit-align-items: center;
+	align-items: center;
+	-webkit-justify-content: center;
+	justify-content: center;
+}
+
+.nav {
+	padding-left: 20px;
+
+}
+

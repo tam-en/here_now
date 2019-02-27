@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block content %}
+
+<h1>Hi, {{ user.username }}! You are here, now.</h1>
+
+<form method="POST" action="post_url/">
+	{% csrf_token %}
+	{{ form.as_p}}
+	<input type="submit" value="Submit" />
+</form>
+
+{% endblock %}

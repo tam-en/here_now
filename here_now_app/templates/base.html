@@ -1,0 +1,27 @@
+{% load staticfiles %}
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>here, now.</title>
+		<link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+		<link href="https://fonts.googleapis.com/css?family=Fira+Sans:400,400i,600,600i,800,800i" rel="stylesheet">
+	</head>
+	<body>
+		<a href="/" class="nav">home</a>
+		{% if user.is_authenticated %}
+			<a href="{% url 'profile' user.username %}" class="nav">profile</a>
+			<a href="{% url 'before' user.id %}" class="nav">before</a>
+			<a href="{% url 'today' user.id %}" class="nav">today</a>
+			<a href="{% url 'logout' %}" class="nav">logout</a>
+		{% else %}
+			<a href="{% url 'about' %}" class="nav">about</a>      
+			<a href="{% url 'login' %}" class="nav">login</a>
+			<a href="{% url 'signup' %}" class="nav">signup</a>
+		{% endif %}
+		<hr />
+			{% block content %}
+			{% endblock %}
+		<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+		<script src="{% static 'app.js' %}"></script>
+	</body>
+</html>

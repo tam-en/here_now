@@ -62,6 +62,7 @@ def today(request):
 	today_exists = False
 	today_day = None
 	user_today_id = None
+	moments = None
 	for day in days:
 		if day.date == now:
 			today_exists = True
@@ -79,7 +80,10 @@ def today(request):
 	form1 = DayForm()
 	form2 = MomentForm()
 	form3 = SimpleDayForm()
-	return render(request, 'today.html', {'form1': form1, 'form2': form2, 'days': days, 'now': now, 'today_exists': today_exists, 'today_day': today_day, 'moments': moments})
+	if moments:
+		return render(request, 'today.html', {'form1': form1, 'form2': form2, 'days': days, 'now': now, 'today_exists': today_exists, 'today_day': today_day, 'moments': moments})
+	else:
+		return render(request, 'today.html', {'form1': form1, 'form2': form2, 'days': days, 'now': now, 'today_exists': today_exists, 'today_day': today_day})		
 
 def post_day(request):
 	form1 = DayForm(request.POST)

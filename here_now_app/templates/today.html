@@ -7,7 +7,7 @@
 
 <div>
 	{% if today_exists == False %}
-		<p>There is no information on today yet. Get started by recording how chilled out you've felt today, on a scale from 0 (super stressed) to (super mellow):</p>
+		<p>There is no information on today yet. Get started by recording how chilled out you've felt today, on a scale from 0 (super stressed) to 10 (super mellow):</p>
 		<form method="POST" action="post_day">
 			{% csrf_token %}
 			{{ form1.as_p}}

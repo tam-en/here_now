@@ -1,5 +1,6 @@
 body {
 	font-family: 'Fira Sans', sans-serif;
+	margin: 0;
 }
 
 p {
@@ -14,19 +15,56 @@ h1, h2, h3, h4, h5, h6 {
 .giant {
 	font-weight: 800;
 	font-size: 40px;
+	animation: TextColor 20s ease infinite;
 }
 
 .title-wrapper {
+	margin: 0;
+	width: 100wh;
+	height: 90vh;
 	display: -webkit-flex;
 	display: flex;
 	-webkit-align-items: center;
 	align-items: center;
 	-webkit-justify-content: center;
 	justify-content: center;
+	background: linear-gradient(180deg, #0C053D, white);
+	background-size: 400% 400%;
+	-webkit-animation: Gradient 20s ease infinite;
+	-moz-animation: Gradient 20s ease infinite;
+	animation: Gradient 20s ease infinite;
+	z-index: -10;
 }
 
 .nav {
 	padding-left: 20px;
+}
 
+@-webkit-keyframes Gradient {
+	0% { background-position: 0% 50% }
+	50% { background-position: 100% 50% }
+	100% { background-position: 0% 50% }
+}
+
+@-moz-keyframes Gradient {
+	0% { background-position: 0% 50% }
+	50% { background-position: 100% 50% }
+	100% { background-position: 0% 50% }
+}
+
+@keyframes Gradient {
+	0% { background-position: 0% 10% }
+	23% { background-position: 100% 90% }
+	57% { background-position: 100% 90% }	
+	90% { background-position: 0% 10% }
+	100% { background-position: 0% 10% }
+}
+
+@keyframes TextColor {
+	0% { color: white }
+	23% { color: black }
+	57% { color: black }
+	90% { color: white }
+	100% { color: white }
 }
 

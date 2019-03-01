@@ -3,44 +3,74 @@
 
 {% block content %}
 
-<h2>Hi, {{ user.username }}!</h2>
-
-<div>
-	{% if today_exists == False %}
+<div class="section">
+	<div class="regular-page">
+		<h2>Hi, {{ user.username }}!</h2>
+	</div>
+</div>
+{% if today_exists == False %}
+<div class="section">
+	<div class="regular-page">
 		<p>There is no information on today yet. Get started by recording how chilled out you've felt today, on a scale from 0 (super stressed) to 10 (super mellow):</p>
 		<form method="POST" action="post_day">
 			{% csrf_token %}
 			{{ form1.as_p}}
 			<input type="submit" name="form1" value="submit" />
 		</form>
-	{% else %}
-		{% for day in days %}
-			{% if day.date == now %}
-				<h3>Today is {{day.date}}</h3>
-				<p>You've recorded a chill score of <strong>{{day.chill_score}}</strong> for today.</p>
+	</div>
+</div>	
+{% else %}
+	{% for day in days %}
+		{% if day.date == now %}
+			<div class="section">
+				<div class="regular-page">
+					<h3>Today is {{day.date}}</h3>
+				</div>
+			</div>
+			<div class="section">
+				<div class="regular-page">
+					<p>You've recorded a chill score of <strong>{{day.chill_score}}</strong> for today.</p>
+				</div>
+			</div>
 				{% if moments %}
-					<h4>Nice moments from today so far:</h4>
-					{% for moment in moments %}
-						<p><strong>{{moment.where}}:</strong> {{moment.desc}}</p>
-					{% endfor %}
-					<p>What other moments would you like to record for today?</p>
+				<div class="section">
+					<div class="left-two">
+						<p><strong>Nice moments from today so far:</strong></p>
+					</div>
+					<div class="right-two">
+						{% for moment in moments %}
+							<p><strong>{{moment.where}}:</strong> {{moment.desc}}</p>
+						{% endfor %}
+					</div>
+ 					</div>	
+					<div class="section">
+							<div class="regular-page">
+								<p><strong>What other moments would you like to record for today?</strong></p>
+							</div>
+					</div>
 				{% else %}
-					<p>What moments would you like to record from today?</p>
+					<div class="section">
+						<div class="regular-page">
+							<h4>What moments would you like to record from today?</h4>
+						</div>
+					</div>
 				{% endif %}
-				<form action="{% url 'post_moment' %}" method="POST">
-					{% csrf_token %}
-					<label>description: </label>
-					<input type="text" name="desc"/>
-					<label>  where: </label>
-					<input type="text" name="where"/>
-					<input type="hidden" name="when" value="{{today_day}}"/>
-					<input type="submit" value="submit"/>
-				</form>
-			{% endif %}
-		{% endfor %}
-	{% endif %}
-</div>
+			<div class="section">
+				<div class="regular-page">
+					<form action="{% url 'post_moment' %}" method="POST">
+						{% csrf_token %}
+						<label>description: </label>
+						<input type="text" name="desc"/>
+						<label>  where: </label>
+						<input type="text" name="where"/>
+						<input type="hidden" name="when" value="{{today_day}}"/>
+						<input type="submit" value="submit"/>
+					</form>
+				</div>
+			</div>
+		{% endif %}
+	{% endfor %}
+{% endif %}
 
-<hr/>
 
 {% endblock %}

@@ -2,28 +2,44 @@
 {% load staticfiles %}
 
 {% block content %}
-
-
-	<h2>Yesterday and before. . .</h2>
-
+	<div class="section">
+		<div class="regular-page">
+			<h2>Yesterday and before. . .</h2>
+		</div>
+	</div>
+	
 	{% if days %}
 		{% for day in days %}
 			{% if day.date != now %}
-				<h2>{{day.date}}</h2>
-				<p>chill score: {{day.chill_score}}</p>
-				{% if day.moment_set.all %}
-					<h4>Nice moments from this day:</h4>
-					{% for moment in day.moment_set.all %}
-						<p><strong>{{moment.where}}:</strong> {{moment.desc}}</p>
-					{% endfor %}
-				{% else %}
-					<p>(no moments recorded for this day)</p>
-				{% endif %}
-			<hr />
+				<div class="section">
+					<div class="regular-page">
+						<h3>{{day.date}}:</h3>
+					</div>
+				</div>
+				<div class="section">
+					<div class="left-two">
+						<p><strong>chill score: {{day.chill_score}}</strong></p>
+					</div>
+					<div class="right-two">
+						{% if day.moment_set.all %}
+									<p><strong>Nice moments from this day:</strong></p>
+									{% for moment in day.moment_set.all %}
+										<p><strong>{{moment.where}}:</strong> {{moment.desc}}</p>
+									{% endfor %}
+						{% else %}
+							<p>(no moments recorded for this day)</p>
+						{% endif %}
+					</div>
+				</div>
 			{% endif %}
 		{% endfor %}
 	{% else %}
-		<p>You haven't recorded information about previous days. So go enjoy today!</p>
+		<div class="section">
+			<div class="regular-page">
+				<p>You haven't recorded information about previous days. So go enjoy today!</p>
+			</div>
+		</div>
 	{% endif %}
+	
 
 {% endblock %}

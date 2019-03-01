@@ -9,6 +9,12 @@ class DayForm(forms.ModelForm):
 		model = Day
 		fields = ['chill_score']
 
+class MomentForm(forms.Form):
+	desc = forms.CharField(label='description')
+	where = forms.CharField(label='where')
+	when = forms.IntegerField(label='')
+
+
 class SimpleDayForm(forms.Form):
 	date = forms.DateField(label = 'date')
 	chill_score = forms.DecimalField(label = 'chill score', decimal_places=1,max_digits=3)

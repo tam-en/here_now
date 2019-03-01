@@ -17,114 +17,30 @@
 		{% for day in days %}
 			{% if day.date == now %}
 				<h3>Today is {{day.date}}</h3>
-				<p>you've recorded a chill score of <strong>{{day.chill_score}}</strong> for today.</p>
-				{% if day.moment_set.all %}
+				<p>You've recorded a chill score of <strong>{{day.chill_score}}</strong> for today.</p>
+				{% if moments %}
 					<h4>Nice moments from today so far:</h4>
-					{% for moment in day.moment_set.all %}
+					{% for moment in moments %}
 						<p><strong>{{moment.where}}:</strong> {{moment.desc}}</p>
 					{% endfor %}
+					<p>What other moments would you like to record for today?</p>
 				{% else %}
 					<p>What moments would you like to record from today?</p>
-					<form action="{% url 'post_moment' %}" method="POST">
-						{% csrf_token %}
-						<label>description: </label>
-						<input type="text" name="desc"/>
-						<label>  where: </label>
-						<input type="text" name="where"/>
-						<label>  when???: {{today_day}}</label>
-						<input type="hidden" name="when" value="{{today_day}}"/>
-						<input type="submit" value="submit"/>
-					</form>					
 				{% endif %}
+				<form action="{% url 'post_moment' %}" method="POST">
+					{% csrf_token %}
+					<label>description: </label>
+					<input type="text" name="desc"/>
+					<label>  where: </label>
+					<input type="text" name="where"/>
+					<input type="hidden" name="when" value="{{today_day}}"/>
+					<input type="submit" value="submit"/>
+				</form>
 			{% endif %}
 		{% endfor %}
 	{% endif %}
-
 </div>
 
 <hr/>
-<hr/>
-<hr/>
-<hr/>
-
-<div>
-	<h3>for loop to display a today record</h3>
-	{% if days %}
-		{% for day in days %}
-			{% if day.date == now %}
-				<h2>{{day.date}}</h2>
-				<p>chill score: {{day.chill_score}}</p>
-				{% if day.moment_set.all %}
-					<h4>Nice moments from today so far:</h4>
-					{% for moment in day.moment_set.all %}
-						<p><strong>{{moment.where}}:</strong> {{moment.desc}}</p>
-					{% endfor %}
-				{% else %}
-					<p>(no moments recorded for today yet)</p>
-				{% endif %}
-				<hr />
-			{% endif %}
-		{% endfor %}
-	{% else %}
-		<p>ain't no days yet</p>
-	{% endif %}
-	<hr/>
-</div>
-
-<h3>form based on documentation</h3>
-<form action="post_day" method="post">
-    {% csrf_token %}
-	<label for="date">date:</label>
-	<input id="date" type="date" name="date" required>
-	<label for="chill_score">chill score:</label>
-	<input id="chill_score" type="decimal" name="chill_score">
-	<input type="submit" name="form3" value="submit">
-</form>
-<hr/>
-
-
-<h3>version of form that calls form.Form. I think</h3>
-<form action="post_day" method="post">
-    {% csrf_token %}
-    {{ form3 }}
-    <input type="submit" name="form3" value="submit">
-</form>
-<hr/>
-
-
-<h3>low-tech form!!!!!!!</h3>
-test readout: {{now}}
-<form action="post_day" method="POST">
-	{% csrf_token %}
-	<label>date: (today) </label>
-	<input type="date" name="date"/>
-	<label>  chill score: </label>
-	<input type="decimal" name="chill_score" placeholder="5"/>
-	<input type="submit" value="submit"/>
-</form>
-<br/>
-<br/>
-foreign key: {{today_day}}
-<form action="{% url 'post_moment' %}" method="POST">
-	{% csrf_token %}
-	<label>description: </label>
-	<input type="text" name="desc"/>
-	<label>  where: </label>
-	<input type="text" name="where"/>
-	<label>  when???: {{today_day}}</label>
-	<input type="hidden" name="when" value="{{today_day}}"/>
-	<input type="submit" value="submit"/>
-</form>
-<hr/>
-
-<h2>forms.ModelForm version:</h2>
-
-
-<form method="POST" action="post_moment">
-	{% csrf_token %}
-	{{ form2.as_p}}
-	<input type="submit" name="form2" value="submit" />
-</form>
-
 
 {% endblock %}

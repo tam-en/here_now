@@ -58,7 +58,6 @@ def about(request):
 
 def today(request):
 	days = list(Day.objects.filter(user_id=request.user.id)) # to convert days from query string to list
-	print("here comes days before it's mucked with:", days)
 	now = datetime.datetime.today().date()
 	today_exists = False
 	today_day = None
@@ -75,12 +74,12 @@ def today(request):
 			today_day = ''.join(str(s) for s in today_day)
 			today_day = int(today_day)
 			# Day.objects.filter(user_id=request.user.id).filter(date=now)	
+	if today_day:
+		moments = list(Moment.objects.filter(when_id=today_day))
 	form1 = DayForm()
 	form2 = MomentForm()
 	form3 = SimpleDayForm()
-	print("NOW =", now)
-	print("today_day", today_day)
-	return render(request, 'today.html', {'form1': form1, 'form2': form2, 'days': days, 'now': now, 'today_exists': today_exists, 'today_day': today_day})
+	return render(request, 'today.html', {'form1': form1, 'form2': form2, 'days': days, 'now': now, 'today_exists': today_exists, 'today_day': today_day, 'moments': moments})
 
 def post_day(request):
 	form1 = DayForm(request.POST)
@@ -91,7 +90,12 @@ def post_day(request):
 		return HttpResponseRedirect('/today')
 
 def post_moment(request):
-	return HttpResponseRedirect('/today')
+	print("hitting the post_moment route")
+	form = MomentForm(request.POST)
+	if form.is_valid():
+		moment = form.save(commit = False)
+		moment.save()
+		return HttpResponseRedirect('/today')
 
 
 def before(request):

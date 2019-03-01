@@ -25,15 +25,19 @@
 					{% endfor %}
 				{% else %}
 					<p>What moments would you like to record from today?</p>
+					<form action="{% url 'post_moment' %}" method="POST">
+						{% csrf_token %}
+						<label>description: </label>
+						<input type="text" name="desc"/>
+						<label>  where: </label>
+						<input type="text" name="where"/>
+						<label>  when???: {{today_day}}</label>
+						<input type="hidden" name="when" value="{{today_day}}"/>
+						<input type="submit" value="submit"/>
+					</form>					
 				{% endif %}
 			{% endif %}
 		{% endfor %}
-		<form method="POST" action="post_moment">
-			{% csrf_token %}
-			{{ form2.as_p}}
-			<input type="submit" name="form2" value="submit" />
-		</form>
-
 	{% endif %}
 
 </div>
@@ -91,12 +95,25 @@
 <h3>low-tech form!!!!!!!</h3>
 test readout: {{now}}
 <form action="post_day" method="POST">
-  {% csrf_token %}
-  <label>date: (today) </label>
-  <input type="date" name="date"/>
-  <label>  chill score: </label>
-  <input type="decimal" name="chill_score" placeholder="5"/>
-  <input type="submit" value="submit"/>
+	{% csrf_token %}
+	<label>date: (today) </label>
+	<input type="date" name="date"/>
+	<label>  chill score: </label>
+	<input type="decimal" name="chill_score" placeholder="5"/>
+	<input type="submit" value="submit"/>
+</form>
+<br/>
+<br/>
+foreign key: {{today_day}}
+<form action="{% url 'post_moment' %}" method="POST">
+	{% csrf_token %}
+	<label>description: </label>
+	<input type="text" name="desc"/>
+	<label>  where: </label>
+	<input type="text" name="where"/>
+	<label>  when???: {{today_day}}</label>
+	<input type="hidden" name="when" value="{{today_day}}"/>
+	<input type="submit" value="submit"/>
 </form>
 <hr/>
 

@@ -57,18 +57,29 @@ def about(request):
 	return render(request, 'about.html')
 
 def today(request):
-	days = list(Day.objects.filter(user_id=request.user.id).order_by('-date')) # to convert days from query string to list
+	days = list(Day.objects.filter(user_id=request.user.id)) # to convert days from query string to list
+	print("here comes days before it's mucked with:", days)
 	now = datetime.datetime.today().date()
 	today_exists = False
 	today_day = None
+	user_today_id = None
 	for day in days:
 		if day.date == now:
 			today_exists = True
-			today_day = list(Day.objects.filter(user_id=request.user.id).filter(date=now))
+			today_day_list = list(Day.objects.filter(user_id=request.user.id).filter(date=now))
+			today_day = ','.join(str(s) for s in today_day_list)
+			today_day = list(today_day.split())
+			today_day = list(today_day[len(today_day)-1])
+			today_day.remove('(')
+			today_day.remove(')')
+			today_day = ''.join(str(s) for s in today_day)
+			today_day = int(today_day)
+			# Day.objects.filter(user_id=request.user.id).filter(date=now)	
 	form1 = DayForm()
 	form2 = MomentForm()
 	form3 = SimpleDayForm()
 	print("NOW =", now)
+	print("today_day", today_day)
 	return render(request, 'today.html', {'form1': form1, 'form2': form2, 'days': days, 'now': now, 'today_exists': today_exists, 'today_day': today_day})
 
 def post_day(request):
@@ -80,12 +91,8 @@ def post_day(request):
 		return HttpResponseRedirect('/today')
 
 def post_moment(request):
-	form2 = MomentForm(request.POST)
-	users_dates = list(Day.objects.filter(user_id=request.user.id).order_by('-date'))
-	if form2.is_valid():
-		moment = form2.save(commit=False)
-		moment.save()
-		return HttpResponseRedirect('/today')
+	return HttpResponseRedirect('/today')
+
 
 def before(request):
 	days = list(Day.objects.filter(user_id=request.user.id).order_by('-date')) # to convert days from query string to list
@@ -95,7 +102,3 @@ def before(request):
 	else:
 		return render(request, 'before.html', {'days': None, 'now': now })
 
-# def day(request, day_id):
-# 	day = Day.objects.get(id=day_id)
-# 	moments = list(Moment.objects.filter(when_id=day_id))
-# 	return render(request, 'day.html', {'day': day, 'moments': moments})

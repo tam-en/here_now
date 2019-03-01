@@ -1,47 +1,41 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Day, Moment
-from .forms import LoginForm, DayForm, MomentForm
+from .forms import LoginForm, DayForm, MomentForm, SimpleDayForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
 import datetime
 
-
 def index(request):
 	return render(request, 'index.html')
 
 def signup(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            return redirect('/')
-    else:
-        form = UserCreationForm()
-    return render(request, 'signup.html', {'form': form})
+	if request.method == 'POST':
+		form = UserCreationForm(request.POST)
+		if form.is_valid():
+			form.save()
+			username = form.cleaned_data.get('username')
+			raw_password = form.cleaned_data.get('password1')
+			user = authenticate(username=username, password=raw_password)
+			login(request, user)
+			return HttpResponseRedirect('/today', {'user': user})
+	else:
+		form = UserCreationForm()
+	return render(request, 'signup.html', {'form': form})
 
 def login_view(request):
 	context = {'error':False}
-	print('step one')
 	if request.method == 'POST':
 		# if post, then authenticate (user submitted username and password)
-		print('step two')
 		form = LoginForm(request.POST)
 		if form.is_valid():
 			u = form.cleaned_data['username']
 			p = form.cleaned_data['password']
 			user = authenticate(username = u, password = p)
-			print('step three, user=')
 			if user is not None:
 				if user. is_active:
-					print('step four')
 					login(request, user)
-					print('step five')
 					return HttpResponseRedirect('/today', {'user': user})
 				else:
 					print("The account has been disabled.")
@@ -57,31 +51,41 @@ def logout_view(request):
 	return HttpResponseRedirect('/')
 
 def profile(request):
-	# user = User.objects.get(username=request.user.id)
 	return render(request, 'profile.html')
 
 def about(request):
 	return render(request, 'about.html')
 
 def today(request):
-	form = DayForm()
-	return render(request, 'today.html', {'form': form})
+	days = list(Day.objects.filter(user_id=request.user.id).order_by('-date')) # to convert days from query string to list
+	now = datetime.datetime.today().date()
+	today_exists = False
+	today_day = None
+	for day in days:
+		if day.date == now:
+			today_exists = True
+			today_day = list(Day.objects.filter(user_id=request.user.id).filter(date=now))
+	form1 = DayForm()
+	form2 = MomentForm()
+	form3 = SimpleDayForm()
+	print("NOW =", now)
+	return render(request, 'today.html', {'form1': form1, 'form2': form2, 'days': days, 'now': now, 'today_exists': today_exists, 'today_day': today_day})
 
-def post_today(request):
-	print("request.user=", request.user.id)
-	print("request.POST=", request.POST)
-	form = DayForm(request.POST)
-	if form.is_valid():
-		# form.save()
-		day = form.save(commit=False)
+def post_day(request):
+	form1 = DayForm(request.POST)
+	if form1.is_valid():
+		day = form1.save(commit=False)
 		day.user_id = request.user.id
 		day.save()
 		return HttpResponseRedirect('/today')
 
-def day(request, day_id):
-	day = Day.objects.get(id=day_id)
-	moments = list(Moment.objects.filter(when_id=day_id))
-	return render(request, 'day.html', {'day': day, 'moments': moments})
+def post_moment(request):
+	form2 = MomentForm(request.POST)
+	users_dates = list(Day.objects.filter(user_id=request.user.id).order_by('-date'))
+	if form2.is_valid():
+		moment = form2.save(commit=False)
+		moment.save()
+		return HttpResponseRedirect('/today')
 
 def before(request):
 	days = list(Day.objects.filter(user_id=request.user.id).order_by('-date')) # to convert days from query string to list
@@ -91,3 +95,7 @@ def before(request):
 	else:
 		return render(request, 'before.html', {'days': None, 'now': now })
 
+# def day(request, day_id):
+# 	day = Day.objects.get(id=day_id)
+# 	moments = list(Moment.objects.filter(when_id=day_id))
+# 	return render(request, 'day.html', {'day': day, 'moments': moments})

@@ -3,35 +3,27 @@
 
 {% block content %}
 
-	<h1>Hi, {{ user.username }}! You are here, now.</h1>
-
-	<form method="POST" action="post_url/">
-		{% csrf_token %}
-		{{ form.as_p}}
-		<input type="submit" value="Submit" />
-	</form>
 
 	<h2>Yesterday and before. . .</h2>
 
 	{% if days %}
 		{% for day in days %}
-			{% if day.date == now %}
-				Hey! It's today!
+			{% if day.date != now %}
+				<h2>{{day.date}}</h2>
+				<p>chill score: {{day.chill_score}}</p>
+				{% if day.moment_set.all %}
+					<h4>Nice moments from this day:</h4>
+					{% for moment in day.moment_set.all %}
+						<p><strong>{{moment.where}}:</strong> {{moment.desc}}</p>
+					{% endfor %}
+				{% else %}
+					<p>(no moments recorded for this day)</p>
+				{% endif %}
+			<hr />
 			{% endif %}
-			<h2>{{day.date}}, {{now}}</h2>
-			<p>chill score: {{day.chill_score}}</p>
-			{% if day.moment_set.all %}
-				<h4>Nice moments from this day:</h4>
-				{% for moment in day.moment_set.all %}
-					<p><strong>{{moment.where}}:</strong> {{moment.desc}}</p>
-				{% endfor %}
-			{% else %}
-				<p>(no moments recorded for this day)</p>
-			{% endif %}
-		<hr />
 		{% endfor %}
 	{% else %}
-		<p>You have not recorded information about previous days. Go enjoy today!</p>
+		<p>You haven't recorded information about previous days. So go enjoy today!</p>
 	{% endif %}
 
 {% endblock %}

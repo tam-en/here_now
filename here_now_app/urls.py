@@ -13,9 +13,10 @@ urlpatterns = [
 	path('logout/', views.logout_view, name="logout"),
 	path('signup', views.signup, name="signup"),
 	path('about', views.about, name="about"),
-	path('day/<int:day_id>', views.day, name="day"),
+	# path('day/<int:day_id>', views.day, name="day"),
 	path('today', views.today, name="today"),
-	path('post_today', views.post_today, name="post_today"),
+	path('post_day', views.post_day, name="post_day"),
+	path('post_moment', views.post_moment, name="post_moment"),
 	# path('before/<user_id>', views.before, name='before')
 	path('before/', views.before, name='before')
 ]

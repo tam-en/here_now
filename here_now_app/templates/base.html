@@ -12,9 +12,10 @@
 			<a href="{% url 'profile' %}" class="nav">profile</a>
 			<a href="{% url 'before' %}" class="nav">before</a>
 			<a href="{% url 'today' %}" class="nav">today</a>
+			<a href="{% url 'about' %}" class="nav">about</a>	
 			<a href="{% url 'logout' %}" class="nav">logout</a>
 		{% else %}
-			<a href="{% url 'about' %}" class="nav">about</a>      
+			<a href="{% url 'about' %}" class="nav">about</a>
 			<a href="{% url 'login' %}" class="nav">login</a>
 			<a href="{% url 'signup' %}" class="nav">signup</a>
 		{% endif %}

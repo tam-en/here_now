@@ -8,15 +8,90 @@
 		<h2>Hi, {{ user.username }}!</h2>
 	</div>
 </div>
+
+
 {% if today_exists == False %}
+
+<!-- ==================== -->
+<!-- DayForm (class Meta) -->
+<!-- ==================== -->
+
 <div class="section">
 	<div class="regular-page">
-		<p>There is no information on today yet. Get started by recording how chilled out you've felt today, on a scale from 0 (super stressed) to 10 (super mellow):</p>
-		<form method="POST" action="post_day">
+		<p>How chilled out have you felt today?</p>
+<!-- 		<form method="POST" action="post_day">
 			{% csrf_token %}
-			{{ form1.as_p}}
+
+			<div class="slidecontainer">
+				<span class="spanleft">chill = </span>					
+				<span class="spanleft"><strong>0</strong></span>
+				<input type="range" min="0" max="10" value="5" name="form1" class="slider" input id="chillRange">
+				<span class="spanright">chill = </span>
+				<span class="spanright"><strong>10</strong></span>
+			</div>
+			
+			{{ form1.chill_score.as_ }}
+			
+			<br>
 			<input type="submit" name="form1" value="submit" />
 		</form>
+		<hr> 
+ -->
+		<!-- =========================== -->
+		<!--  SimpleDayForm (forms.Form) -->
+		<!-- =========================== -->
+
+<!-- 		<form method="POST" action="post_day">
+			{% csrf_token %}
+			<div class="slidecontainer">
+				<span class="spanleft">anti chill</span>	
+				<span class="spanleft"><strong>0</strong></span>
+				<input type="range" min="0" max="10" value="submit" name="chill_score" class="slider" id="chillRange">
+				<span class="spanright"><strong>10</strong></span>
+				<span class="spanright">super chill</span>				
+			</div>
+			{{ form3.as_p }}
+			<br>
+			<input type="submit" name="form1" value="submit" />
+		</form>
+		<hr>  -->
+
+		<!-- =========== -->
+		<!--  HTML form  -->
+		<!-- =========== -->
+
+		<form action="post_day" method="POST" oninput="x.value=parseFloat(a.value)">
+			{% csrf_token %}
+			<div class="slidecontainer">
+				<!-- <span class="spanleft">chill = </span>	 -->				
+				<!-- <span class="spanleft"></span> -->
+<!-- 				<input type="range" min="0" max="10" class="slider" id="chill_score" name="chill_score" />
+ -->				<input type="range" min="0" max="10" class="slider" id="a" name="chill_score" />
+
+				<!-- <span class="spanright">chill score = </span> -->
+				<!-- <span class="spanright"></span><br><br> -->
+				
+<!-- 				<output for="chill_score" onforminput="value = chill_score.valueAsNumber;"></output>
+ -->				<output name="x" for="a"></output>
+
+				
+			</div>
+<!-- 			<p>chillscore!!! = {{ chillscore }}</p>
+ -->
+<!-- 			<input type="hidden, date" name="date" id="date" value={{ datetime.datetime.now }} ><br><br>
+ -->
+<!-- 
+			{{ now }}<br><br>
+			<br><br> -->
+
+			<input type="submit" name="submit" value="submit"/>
+		</form>
+<!-- 		<form oninput="x.value=parseFloat(a.value)">
+			0<input type="range" id="a" value="50">100<br>
+			<output name="x" for="a"></output>
+		</form> -->
+
+
 	</div>
 </div>	
 {% else %}

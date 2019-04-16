@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from .models import Day, Moment
-from .forms import LoginForm, DayForm, MomentForm, SimpleDayForm
+from .forms import LoginForm, DayForm, MomentForm # SimpleDayForm
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.forms import UserCreationForm
@@ -41,6 +41,10 @@ def login_view(request):
 					print("The account has been disabled.")
 			else:
 				print("The username and/or password is incorrect.")
+				# just added this:
+				form = LoginForm()
+				return render(request, 'login.html', {'form': form}) 
+			
 	else:
 		print('step five')
 		form = LoginForm()
@@ -57,8 +61,15 @@ def about(request):
 	return render(request, 'about.html')
 
 def today(request):
+	print("today route request.POST:", request.POST)
+	print("today route request.GET:", request.GET)
+	print("request at beginning of today=", request)
+	print(request.user.id, "heya!")
+
 	days = list(Day.objects.filter(user_id=request.user.id)) # to convert days from query string to list
 	now = datetime.datetime.today().date()
+	print("trying something", datetime.datetime.today().date())
+	print("ZZZZZZZ now is", now)
 	today_exists = False
 	today_day = None
 	user_today_id = None
@@ -79,13 +90,14 @@ def today(request):
 		moments = list(Moment.objects.filter(when_id=today_day))
 	form1 = DayForm()
 	form2 = MomentForm()
-	form3 = SimpleDayForm()
+	# form3 = SimpleDayForm()
 	if moments:
 		return render(request, 'today.html', {'form1': form1, 'form2': form2, 'days': days, 'now': now, 'today_exists': today_exists, 'today_day': today_day, 'moments': moments})
 	else:
 		return render(request, 'today.html', {'form1': form1, 'form2': form2, 'days': days, 'now': now, 'today_exists': today_exists, 'today_day': today_day})		
 
 def post_day(request):
+	print("post_day route:", request.POST)
 	form1 = DayForm(request.POST)
 	if form1.is_valid():
 		day = form1.save(commit=False)
@@ -93,8 +105,33 @@ def post_day(request):
 		day.save()
 		return HttpResponseRedirect('/today')
 
+# def post_day(request):
+# 	print("post_day route:", request.POST)
+# 	# save_user = SimpleDayForm(user=request.user)
+# 	# form = SimpleDayForm(request.POST, instance=save_user)
+# 	form = SimpleDayForm(request.POST)
+# 	if form.is_valid():
+# 		day = form.save(commit = False)
+# 		# day.date = datetime.datetime.today().date()
+# 		# day.user_id = request.user.id
+# 		# day.chill_score = request.chill_score
+# 		day.save()
+# 		return HttpResponseRedirect('/today')
+
+# def post_day(request):
+# 	print("post_day new HTML plain route:", request.POST)
+# 	print("server generated date=", datetime.datetime.today().date())
+# 	print(request.user.id, "heya again!!!!!!")
+# 	# user_id = request.user.id
+# 	# date = datetime.datetime.today().date()
+# 	# chill_score = request.chill_score
+# 	# context = {}
+
+# 	return HttpResponseRedirect('/today')
+
 def post_moment(request):
 	print("hitting the post_moment route")
+	print(request.POST)
 	form = MomentForm(request.POST)
 	if form.is_valid():
 		moment = form.save(commit = False)
